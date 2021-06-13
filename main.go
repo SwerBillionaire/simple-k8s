@@ -17,11 +17,12 @@ type HelloRequest struct {
 
 func main() {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", hello)
+	mux.HandleFunc("/hello", hello)
 	server := &http.Server{
-		Addr: ":3000",
+		Addr:    ":3001",
+		Handler: mux,
 	}
-	fmt.Printf("Server is ready at %s \n", server.Addr)
+	fmt.Printf("Server is ready at %s with latest update\n", server.Addr)
 	err := server.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
@@ -36,12 +37,14 @@ func hello(writer http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	fmt.Println(helloReq.Name)
+
 	if helloReq.Name == "" {
 		http.Error(writer, "name is empty string", http.StatusBadRequest)
 		return
 	}
 
-	responseData := fmt.Sprintf("hello %s", helloReq.Name)
+	responseData := fmt.Sprintf("Greetings %s", helloReq.Name)
 	data, err := json.Marshal(&HelloResponse{
 		Data: responseData,
 	})

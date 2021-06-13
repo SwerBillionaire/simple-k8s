@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-app-deployment
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      name: go-app
+  template:
+    metadata:
+      labels:
+        name: go-app
+    spec:
+      containers:
+        - name: simple-go
+          image: anuwong/simple-go:"${TAG}"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3001
